@@ -7,9 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import {Link} from "react-router-dom";
 
-
-const styles = {
+const styles = (theme) => ({
     constyle:{
         margin:0,
         padding:0,
@@ -23,9 +23,11 @@ const styles = {
         margin:"0 auto",
         padding:"3% 5%",
         width:"45%",
-    
         backgroundColor:"#EEEEEE",
         textAlign:"center",
+        [theme.breakpoints.down('sm')]: {
+            width:"80%",
+          },
     },
     input:{
         border:1,
@@ -35,15 +37,28 @@ const styles = {
         textAlign:"left",
         width:"70%",
         margin:"0 auto",
-    }
-}
+        [theme.breakpoints.down('sm')]: {
+            width:"90%",
+        },
+    },
+})
 
 class Login extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            click:false
+            click:false,
+            account:"",
+            password:"",
+            members:[],
+            key:[]
         }
+    }
+    changeAccount(event){
+        this.setState({account:event.target.value})
+    }
+    changePassword(event){
+        this.setState({password:event.target.value})
     }
     changeClick(){
         this.setState({click:!this.state.click});
@@ -52,16 +67,15 @@ class Login extends React.Component {
         if (this.state.click) {
             return(
                 <TextField style={{backgroundColor:"#EEFFFF"}} type="text" margin="dense" 
-                            variant="outlined" fullWidth="true" label="パスワード" required="true"/>
+                            variant="outlined" fullWidth="true" label="パスワード" required="true" onChange={(e) => this.changePassword(e)}/>
             );
         }else{
             return(
                 <TextField style={{backgroundColor:"#EEFFFF"}} type="password" margin="dense" 
-                                variant="outlined" fullWidth="true" label="パスワード" required="true"/>
+                                variant="outlined" fullWidth="true" label="パスワード" required="true" onChange={(e) => this.changePassword(e)}/>
             );
         }
     }
-
 
     render(){
         const { classes } = this.props;
@@ -73,11 +87,13 @@ class Login extends React.Component {
                     </Typography>
                     <Paper className={classes.paper}>
                         <div className={classes.standard}>
-                            <TextField style={{backgroundColor:"#EEFFFF"}} margin="dense" 
-                            variant="outlined" fullWidth="true" label="アカウント" required="true"/>
+                            <TextField style={{backgroundColor:"#EEFFFF"}} type="email" margin="dense" 
+                            variant="outlined" fullWidth="true" label="アカウント" required="true" onChange={(e) => this.changeAccount(e)}/>
                             {this.passChange()}                            
                             <FormControlLabel control={<Checkbox color="default" checked={this.state.click} onClick={() => this.changeClick()}/>} label="パスワードを表示する" />         
-                            <Button fullWidth="true" style={{marginTop:"10%",backgroundColor:"#00CC00",color:"white"}}>ログイン</Button>
+                            <Link to="/Member" style={{textDecoration:"none"}}>
+                                <Button fullWidth="true" style={{marginTop:"10%",backgroundColor:"#00CC00",color:"white"}}>ログイン</Button>
+                            </Link>
                         </div>
                     </Paper>
                 </Container>
@@ -87,7 +103,7 @@ class Login extends React.Component {
 }
 
 //Login.propTypes = {
-    //classes: PropTypes.object,
+    //classes:PropTypes.object,
 //};
 
 export default withStyles(styles)(Login);
