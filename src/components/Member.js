@@ -5,6 +5,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContentText from '@material-ui/core/DialogContentText';
 //import FormControlLabel from '@material-ui/core/FormControlLabel';
 //import Checkbox from '@material-ui/core/Checkbox';
 import {Link} from "react-router-dom";
@@ -43,6 +47,10 @@ const styles = (theme) => ({
             width:"90%",
         },
     },
+    text:{
+        width:"90%",
+        margin:"0 auto"
+    }
 })
 
 class Member extends React.Component {
@@ -53,7 +61,13 @@ class Member extends React.Component {
             nAccount:"",
             nPassword:"",
             nProfile:"",
+            checkflag:false,
+            open:false
         }
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.flagClose = this.flagClose.bind(this);
+        this.flagOpen=this.flagOpen.bind(this);
         const firebaseConfig = {
             apiKey: process.env.API_KEY,
             authDomain: process.env.AUTH_DOMAIN,
@@ -64,9 +78,62 @@ class Member extends React.Component {
         };
         firebase.initializeApp(firebaseConfig);
     }
+    //ダイアログの開閉ファンクション
+    handleOpen() {
+        this.setState({open: true});
+      }
+    handleClose() {
+        this.setState({open: false});
+    }
+    flagOpen(){
+        this.setState({checkflag:true});
+    }
+    flagClose(){
+        this.setState({checkflag:false});
+    }
     onChangeValue(event){
         this.setState({[event.target.name]:event.target.value})
     }
+    checkEntry(){
+        if (this.state.nName !="" && this.state.nAccount != "" && this.state.nPassword != "") {
+            this.setState({open:true})
+        } else {
+            this.setState({checkflag:true}) 
+        }
+    }
+    openDialog(){
+        const { classes } = this.props;
+        return(
+            <Dialog open={this.state.open} onClose={this.handleClose} fullwidth="true">
+                <DialogTitle>アカウント登録確認</DialogTitle>
+                    <DialogContentText className={classes.text}>
+                        {`${this.state.nName}さんのアカウントを登録してよろしいですか？`}
+                    </DialogContentText>
+                    <DialogContentText className={classes.text}>
+                        {`アカウントは、${this.state.nAccount}です。`}    
+                    </DialogContentText>
+                <DialogActions>
+                    <Button>はい</Button>
+                    <Button onClick={this.handleClose}>いいえ</Button>
+                </DialogActions>
+            </Dialog>
+        );       
+    }
+    openAttend(){
+        const {classes} = this.props;
+        return(
+            <Dialog opne={this.state.checkflag} onClose={this.flagClose} fullwidth="true">
+                <DialogTitle>入力確認メッセージ</DialogTitle>
+                    <DialogContentText className={classes.text}>
+                        必須項目の入力漏れです。
+                    </DialogContentText>
+                <DialogActions>
+                    <Button onClick={this.flagClose}>確認</Button>
+                </DialogActions>
+            </Dialog>
+        );
+    }
+
     render(){
         const { classes } = this.props;
         return(
@@ -90,10 +157,13 @@ class Member extends React.Component {
                             <TextField style={{backgroundColor:"#EEFFFF"}} margin="dense"
                                 variant="outlined" fullWidth="true" label="プロフィール" 
                                 multiline="true" rows="5" name="nProfile" onChange={(e) => this.onChangeValue(e)}/>
-                            <Button fullWidth="true" style={{marginTop:"10%",backgroundColor:"#0000CC",color:"white"}}>登録</Button>
+                            <Button fullWidth="true" style={{marginTop:"5%",backgroundColor:"#0000CC",color:"white"}}
+                                onClick={()=>this.checkEntry()}>登録</Button>
                             <Link to="/">
-                                <Typography style={{marginTop:"30px",textDecoration:"none"}}>ログイン画面へ</Typography>
+                                <Typography style={{marginTop:"20px",textDecoration:"none"}}>ログイン画面へ</Typography>
                             </Link>
+                            {this.openDialog()}
+                            {this.openAttend()}
                         </div>
                     </Paper>
                 </Container>
