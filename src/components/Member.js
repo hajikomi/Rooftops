@@ -14,6 +14,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import {Link} from "react-router-dom";
 import * as firebase from "firebase/app";
 import "firebase/database";
+import MyDialog from './myDialog'
 
 const styles = (theme) => ({
     constyle:{
@@ -61,6 +62,8 @@ class Member extends React.Component {
             nAccount:"",
             nPassword:"",
             nProfile:"",
+            members:[],
+            key:[],
             checkflag:false,
             open:false
         }
@@ -78,6 +81,25 @@ class Member extends React.Component {
         };
         firebase.initializeApp(firebaseConfig);
     }
+    componentDidMount() {
+        const messagesRef = firebase.database().ref('Members');
+        messagesRef.on('value', snapshot => {
+            const messageObject = snapshot.val();
+            //console.log(messageObject);
+            if (messageObject) {
+                for (var key in messageObject) {
+                    const obj = messageObject[key]
+                    this.setState({
+                        members:this.state.members.concat(obj),
+                        key:this.state.key.concat(key)
+                    })
+                    //console.log(obj);
+                    //console.log(key)
+                }
+            }
+        });
+    }
+
     //ダイアログの開閉ファンクション
     handleOpen() {
         this.setState({open: true});
@@ -113,27 +135,29 @@ class Member extends React.Component {
                         {`アカウントは、${this.state.nAccount}です。`}    
                     </DialogContentText>
                 <DialogActions>
-                    <Button>はい</Button>
+                    <Button onClick={() => this.addMember()}>はい</Button>
                     <Button onClick={this.handleClose}>いいえ</Button>
                 </DialogActions>
             </Dialog>
         );       
     }
     openAttend(){
-        const {classes} = this.props;
         return(
-            <Dialog opne={this.state.checkflag} onClose={this.flagClose} fullwidth="true">
-                <DialogTitle>入力確認メッセージ</DialogTitle>
-                    <DialogContentText className={classes.text}>
-                        必須項目の入力漏れです。
-                    </DialogContentText>
-                <DialogActions>
-                    <Button onClick={this.flagClose}>確認</Button>
-                </DialogActions>
-            </Dialog>
+            <MyDialog flag={this.state.checkflag}  
+            title={'入力確認メッセージ'} text={'必須項目に漏れがあります'}/>
         );
     }
-
+    addMember(){
+        const messagesRef = firebase.database().ref('Members');
+        const member = {
+                        name:this.state.nName,
+                        account:this.state.nAccount,
+                        password:this.state.
+                        nPassword,profile:this.state.nProfile,
+        }
+        messagesRef.push(member);
+        this.handleClose();
+    }
     render(){
         const { classes } = this.props;
         return(

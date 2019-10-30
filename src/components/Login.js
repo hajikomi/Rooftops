@@ -8,6 +8,10 @@ import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import {Link} from "react-router-dom";
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 const styles = (theme) => ({
     constyle:{
@@ -41,6 +45,10 @@ const styles = (theme) => ({
             width:"90%",
         },
     },
+    text:{
+        width:"90%",
+        margin:"0 auto"
+    }
 })
 
 class Login extends React.Component {
@@ -51,8 +59,10 @@ class Login extends React.Component {
             account:"",
             password:"",
             members:[],
-            key:[]
+            key:[],
+            flag:false
         }
+        this.flagClose=this.flagClose.bind(this)
     }
     changeAccount(event){
         this.setState({account:event.target.value})
@@ -62,6 +72,30 @@ class Login extends React.Component {
     }
     changeClick(){
         this.setState({click:!this.state.click});
+    }
+    flagClose(){
+        this.setState({flag:false});
+    }
+    openCheck(){
+        const {classes} = this.props;
+        return(
+            <Dialog open={this.state.flag} onClose={this.flagClose} fullwidth="true">
+                <DialogTitle>入力確認メッセージ</DialogTitle>
+                    <DialogContentText className={classes.text}>
+                        必須項目に漏れがあります。
+                    </DialogContentText>
+                <DialogActions>
+                    <Button onClick={this.flagClose}>確認</Button>
+                </DialogActions>
+            </Dialog>
+        );
+    }
+    btnClick(){
+        if (this.state.account == "" && this.state.password =="") {
+            this.setState({flag:true});
+        }else{
+            this.setState({flag:false});
+        }
     }
     passChange(){
         if (this.state.click) {
@@ -88,12 +122,12 @@ class Login extends React.Component {
                     <Paper className={classes.paper}>
                         <div className={classes.standard}>
                             <TextField style={{backgroundColor:"#EEFFFF"}} type="email" margin="dense" 
-                            variant="outlined" fullWidth="true" label="アカウント" required="true" onChange={(e) => this.changeAccount(e)}/>
+                            variant="outlined" fullWidth="true" label="メールアドレス" required="true" onChange={(e) => this.changeAccount(e)}/>
                             {this.passChange()}                            
                             <FormControlLabel control={<Checkbox color="default" checked={this.state.click} onClick={() => this.changeClick()}/>} label="パスワードを表示する" />         
-                            <Link to="/Member" style={{textDecoration:"none"}}>
-                                <Button fullWidth="true" style={{marginTop:"10%",backgroundColor:"#00CC00",color:"white"}}>ログイン</Button>
-                            </Link>
+                            <Button onClick={() => this.btnClick()} fullWidth="true" style={{marginTop:"10%",backgroundColor:"#00CC00",color:"white"}}>ログイン</Button>
+                            
+                            {this.openCheck()}
                         </div>
                     </Paper>
                 </Container>
