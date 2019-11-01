@@ -34,7 +34,7 @@ class MyDialog extends React.Component{
                         {this.props.text}
                     </DialogContentText>
                 <DialogActions>
-                    <Button onClick={this.props.close}>確認</Button>
+                    <Button onClick={this.flagClose}>確認</Button>
                 </DialogActions>
             </Dialog>
             </div>

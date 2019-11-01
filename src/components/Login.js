@@ -12,6 +12,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import * as firebase from "firebase/app";
+import "firebase/database";
+//import Portal from './Portal'
 
 const styles = (theme) => ({
     constyle:{
@@ -63,7 +66,35 @@ class Login extends React.Component {
             flag:false
         }
         this.flagClose=this.flagClose.bind(this)
+        const firebaseConfig = {
+            apiKey: process.env.API_KEY,
+            authDomain: process.env.AUTH_DOMAIN,
+            databaseURL: process.env.DATABASE_URL,
+            projectId: process.env.PROJECT_ID,
+            storageBucket: process.env.STORAGE_BUCKET,
+            messagingSenderId: process.env.MESSAGING_SENDER_ID,
+        };
+        firebase.initializeApp(firebaseConfig);
     }
+    componentDidMount() {
+        const messagesRef = firebase.database().ref('Members');
+        messagesRef.on('value', snapshot => {
+            const messageObject = snapshot.val();
+            //console.log(messageObject);
+            if (messageObject) {
+                for (var key in messageObject) {
+                    const obj = messageObject[key]
+                    this.setState({
+                        members:this.state.members.concat(obj),
+                        key:this.state.key.concat(key)
+                    })
+                    console.log(obj);
+                    console.log(key)
+                }
+            }
+        });
+    }
+
     changeAccount(event){
         this.setState({account:event.target.value})
     }
@@ -91,10 +122,13 @@ class Login extends React.Component {
         );
     }
     btnClick(){
+        const members = this.state.members
         if (this.state.account == "" && this.state.password =="") {
             this.setState({flag:true});
         }else{
             this.setState({flag:false});
+
+
         }
     }
     passChange(){
@@ -125,8 +159,12 @@ class Login extends React.Component {
                             variant="outlined" fullWidth="true" label="メールアドレス" required="true" onChange={(e) => this.changeAccount(e)}/>
                             {this.passChange()}                            
                             <FormControlLabel control={<Checkbox color="default" checked={this.state.click} onClick={() => this.changeClick()}/>} label="パスワードを表示する" />         
-                            <Button onClick={() => this.btnClick()} fullWidth="true" style={{marginTop:"10%",backgroundColor:"#00CC00",color:"white"}}>ログイン</Button>
-                            
+                            <Link to="/Portal">
+                                <Button onClick={() => this.btnClick()} fullWidth="true" style={{marginTop:"10%",backgroundColor:"#00CC00",color:"white"}}>ログイン</Button>
+                            </Link>
+                            <Link to="/Member">
+                                <Typography style={{marginTop:"20px",textDecoration:"none"}}>新規登録画面へ</Typography>
+                            </Link>
                             {this.openCheck()}
                         </div>
                     </Paper>
