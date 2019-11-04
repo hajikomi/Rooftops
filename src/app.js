@@ -8,9 +8,12 @@ import Portal from './components/Portal';
 
 ReactDom.render(
     <BrowserRouter>
+    <div>
         <Route exact path="/" component={Login} />
         <Route path="/Member" component={Member} />
         <Route path="/Portal" component={Portal} />
+    </div>
+
     </BrowserRouter>,
     document.getElementById('app')
 );

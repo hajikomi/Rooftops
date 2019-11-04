@@ -14,6 +14,8 @@ import Paper from '@material-ui/core/Paper';
 //import DialogContentText from '@material-ui/core/DialogContentText';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
+import {BrowserRouter} from "react-router-dom";
+import Calender from './Calender';
 
 const styles = (theme) => ({
     root: {
@@ -28,13 +30,13 @@ const styles = (theme) => ({
 class Portal extends React.Component {
     constructor(props) {
         super(props);
-        
-        }
-        
+    }    
 
     render(){
         const { classes } = this.props;
         return(
+            <BrowserRouter>
+            
             <div className={classes.root}>
                 <Paper className={classes.paper}>
                     <MenuList>
@@ -46,11 +48,10 @@ class Portal extends React.Component {
                     </MenuList>
                 </Paper>
             </div>
+            <Calender />
+            </BrowserRouter>
         );
     }
 }
-
-
-
 
 export default withStyles(styles)(Portal);

@@ -14,7 +14,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import {Link} from "react-router-dom";
 import * as firebase from "firebase/app";
 import "firebase/database";
-import MyDialog from './myDialog'
+//import MyDialog from './myDialog'
 
 const styles = (theme) => ({
     constyle:{
@@ -71,35 +71,17 @@ class Member extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.flagClose = this.flagClose.bind(this);
         this.flagOpen=this.flagOpen.bind(this);
-        const firebaseConfig = {
-            apiKey: process.env.API_KEY,
-            authDomain: process.env.AUTH_DOMAIN,
-            databaseURL: process.env.DATABASE_URL,
-            projectId: process.env.PROJECT_ID,
-            storageBucket: process.env.STORAGE_BUCKET,
-            messagingSenderId: process.env.MESSAGING_SENDER_ID,
-        };
-        firebase.initializeApp(firebaseConfig);
+        //const firebaseConfig = {
+            //apiKey: process.env.API_KEY,
+            //authDomain: process.env.AUTH_DOMAIN,
+            //databaseURL: process.env.DATABASE_URL,
+            //projectId: process.env.PROJECT_ID,
+            //storageBucket: process.env.STORAGE_BUCKET,
+            //messagingSenderId: process.env.MESSAGING_SENDER_ID,
+        //};
+        //firebase.initializeApp(firebaseConfig);
     }
-    componentDidMount() {
-        const messagesRef = firebase.database().ref('Members');
-        messagesRef.on('value', snapshot => {
-            const messageObject = snapshot.val();
-            //console.log(messageObject);
-            if (messageObject) {
-                for (var key in messageObject) {
-                    const obj = messageObject[key]
-                    this.setState({
-                        members:this.state.members.concat(obj),
-                        key:this.state.key.concat(key)
-                    })
-                    //console.log(obj);
-                    //console.log(key)
-                }
-            }
-        });
-    }
-
+    
     //ダイアログの開閉ファンクション
     handleOpen() {
         this.setState({open: true});
@@ -142,22 +124,30 @@ class Member extends React.Component {
         );       
     }
     openAttend(){
+        const { classes } = this.props;
         return(
-            <MyDialog flag={this.state.checkflag}  
-            title={'入力確認メッセージ'} text={'必須項目に漏れがあります'}/>
+            <Dialog open={this.state.checkflag} onClose={this.flagClose} fullwidth="true">
+                <DialogTitle>入力確認メッセージ</DialogTitle>
+                    <DialogContentText className={classes.text}>
+                        必須項目に漏れがあります
+                    </DialogContentText>
+                <DialogActions>
+                    <Button onClick={this.flagClose}>確認</Button>
+                </DialogActions>
+            </Dialog>
         );
     }
-    addMember(){
-        const messagesRef = firebase.database().ref('Members');
-        const member = {
-                        name:this.state.nName,
-                        account:this.state.nAccount,
-                        password:this.state.
-                        nPassword,profile:this.state.nProfile,
-        }
-        messagesRef.push(member);
-        this.handleClose();
-    }
+    //addMember(){
+        //const messagesRef = firebase.database().ref('Members');
+        //const member = {
+                       // name:this.state.nName,
+                        //account:this.state.nAccount,
+                        //password:this.state.
+                        //nPassword,profile:this.state.nProfile,
+        //}
+        //messagesRef.push(member);
+        //this.handleClose();
+    //}
     render(){
         const { classes } = this.props;
         return(

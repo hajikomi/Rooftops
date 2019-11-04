@@ -15,6 +15,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import * as firebase from "firebase/app";
 import "firebase/database";
 //import Portal from './Portal'
+//import Member from './Member'
 
 const styles = (theme) => ({
     constyle:{
@@ -122,7 +123,7 @@ class Login extends React.Component {
         );
     }
     btnClick(){
-        const members = this.state.members
+        //const members = this.state.members
         if (this.state.account == "" && this.state.password =="") {
             this.setState({flag:true});
         }else{
@@ -147,7 +148,7 @@ class Login extends React.Component {
 
     render(){
         const { classes } = this.props;
-        return(
+        return(          
             <div>
                 <Container className={classes.constyle}>
                     <Typography align="center" variant="h3" style={{margin:"30px"}}>
@@ -159,12 +160,14 @@ class Login extends React.Component {
                             variant="outlined" fullWidth="true" label="メールアドレス" required="true" onChange={(e) => this.changeAccount(e)}/>
                             {this.passChange()}                            
                             <FormControlLabel control={<Checkbox color="default" checked={this.state.click} onClick={() => this.changeClick()}/>} label="パスワードを表示する" />         
-                            <Link to="/Portal">
+                            <Link to="/Portal" style={{textDecoration:"none"}}>
                                 <Button onClick={() => this.btnClick()} fullWidth="true" style={{marginTop:"10%",backgroundColor:"#00CC00",color:"white"}}>ログイン</Button>
                             </Link>
+                           
                             <Link to="/Member">
                                 <Typography style={{marginTop:"20px",textDecoration:"none"}}>新規登録画面へ</Typography>
                             </Link>
+                           
                             {this.openCheck()}
                         </div>
                     </Paper>
