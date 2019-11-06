@@ -14,7 +14,8 @@ import Paper from '@material-ui/core/Paper';
 //import DialogContentText from '@material-ui/core/DialogContentText';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import {BrowserRouter} from "react-router-dom";
+//import {BrowserRouter} from "react-router-dom";
+//import Grid from '@material-ui/core/Grid';
 import Calender from './Calender';
 
 const styles = (theme) => ({
@@ -30,26 +31,47 @@ const styles = (theme) => ({
 class Portal extends React.Component {
     constructor(props) {
         super(props);
+        this.state={
+            flag:false,
+            month:""
+        }
+        let date=new Date();
+        this.monthCange= this.setState({month:date.getMonth()})
     }    
+    changeFlag(){
+        this.setState({flag:!this.state.flag})
+    }
+    clickCalender(){
+        if (this.state.flag) {
+            return(
+                <Calender month={this.state.month}/>
+            );
+        } else {
+            return
+        }
+    }
 
     render(){
         const { classes } = this.props;
         return(
-            <BrowserRouter>
-            
-            <div className={classes.root}>
-                <Paper className={classes.paper}>
-                    <MenuList>
-                        <MenuItem>ホーム</MenuItem>
-                        <MenuItem>インフォ</MenuItem>
-                        <MenuItem>掲示板</MenuItem>
-                        <MenuItem>フォルダ</MenuItem>
-                        <MenuItem>スケジュール</MenuItem>
-                    </MenuList>
-                </Paper>
+            <div style={{display:"flex",alignItems:"flex-start"}}>
+                <div className={classes.root}>
+                    <Paper className={classes.paper}>
+                        <MenuList>
+                            <MenuItem>ホーム</MenuItem>
+                            <MenuItem>インフォ</MenuItem>
+                            <MenuItem>掲示板</MenuItem>
+                            <MenuItem>フォルダ</MenuItem>
+                            <MenuItem onClick={() => this.changeFlag()}>スケジュール</MenuItem>
+                        </MenuList>
+                    </Paper>
+                </div>
+                <div>
+                  {this.clickCalender()}  
+                </div>
+                
             </div>
-            <Calender />
-            </BrowserRouter>
+            
         );
     }
 }

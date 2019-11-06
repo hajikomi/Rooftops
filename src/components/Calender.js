@@ -11,7 +11,7 @@ const weekdays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
 const cardStyle = { margin: 1 }
 
 const Calendar = (props)=>{
-  const begining = new Date(2019, 1, 1);
+  const begining = new Date();
 
   const calendar = []
   Array.apply(null, {length: begining.getDay()}).map(Number.call, Number).forEach((e)=>{
