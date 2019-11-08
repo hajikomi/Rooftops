@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 //import DialogContentText from '@material-ui/core/DialogContentText';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
+//import Drawer from '@material-ui/core/Drawer';
 //import {BrowserRouter} from "react-router-dom";
 //import Grid from '@material-ui/core/Grid';
 import Calender from './Calender';
@@ -26,7 +27,6 @@ const styles = (theme) => ({
         marginRight: theme.spacing(2),
       },
 })
-
 
 class Portal extends React.Component {
     constructor(props) {
@@ -57,6 +57,7 @@ class Portal extends React.Component {
             <div style={{display:"flex",alignItems:"flex-start"}}>
                 <div className={classes.root}>
                     <Paper className={classes.paper}>
+                        
                         <MenuList>
                             <MenuItem>ホーム</MenuItem>
                             <MenuItem>インフォ</MenuItem>

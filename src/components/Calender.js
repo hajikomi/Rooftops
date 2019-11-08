@@ -11,7 +11,21 @@ const weekdays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
 const cardStyle = { margin: 1 }
 
 const Calendar = (props)=>{
-  const begining = new Date();
+const begining = new Date();
+ // enddate        = days[month - 1];                    //　最後の日
+  //prevyear    = year;                            //　前月・次月
+  //prevmonth    = month - 1;
+  //nextyear    = year;
+  //nextmonth    = month + 1;
+  //if(prevmonth < 1) {
+      //prevyear--;
+      //prevmonth += 12;
+  //}
+  //else if(nextmonth > 12) {
+      //nextyear++;
+      //nextmonth -= 12;
+  //}
+
 
   const calendar = []
   Array.apply(null, {length: begining.getDay()}).map(Number.call, Number).forEach((e)=>{
